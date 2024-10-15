@@ -1,0 +1,31 @@
+@startuml
+
+Folder "1" *-- "many" File : contains >
+Folder "1" *-- "many" Folder : contains >
+
+class File {
+    - name : String
+    + File(String name)
+    + getName() : String
+    + setName(String name) : void
+    + toString() : String
+}
+
+class Folder {
+    - name : String
+    - subfolders : ArrayList<Folder>
+    - files : ArrayList<File>
+
+    + Folder()
+    + getName() : String
+    + setName(String name) : void
+    + removeSubfolder(String subFolderName) : void
+    + addSubfolder(String subFolderName) : void
+    + getSubfolder(String subFolderName) : Folder
+    + removeFile(File file) : boolean
+    + addFile(String fileName) : void
+    + toString() : String
+    + printFolderContents() : void
+}
+
+@enduml
