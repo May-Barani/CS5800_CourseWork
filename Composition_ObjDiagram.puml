@@ -1,0 +1,70 @@
+@startuml
+
+object "phpDemo1: Folder" as mainFolder {
+  name = "php_demo1"
+  subfolders = ["Source Files", "Include Path", "Remote Files"]
+}
+
+object "Source Files: Folder" as sf1 {
+  name = "Source Files"
+  subfolders = [".phalcon", "cache", "public"]
+}
+
+object ".phalcon: Folder" as sf4 {
+  name = ".phalcon"
+  subfolders = []
+  files = []
+
+}
+
+object "cache: Folder" as sf5 {
+  name = "cache"
+  subfolders = []
+  files = []
+
+}
+
+object "public: Folder" as sf6 {
+  name = "public"
+  files = [".htaccess", ".htrouter.php", "index.html"]
+}
+
+object ".htaccess: File" as f1 {
+  name = ".htaccess"
+}
+
+object ".htrouter.php: File" as f2 {
+  name = ".htrouter.php"
+}
+
+object "index.html: File" as f3 {
+  name = "index.html"
+}
+
+object "Include Path: Folder" as sf2 {
+  name = "Include Path"
+  subfolders = []
+  files = []
+
+}
+
+object "Remote Files: Folder" as sf3 {
+  name = "Remote Files"
+  subfolders = []
+  files = []
+
+}
+
+mainFolder *-- sf1
+mainFolder *-- sf2
+mainFolder *-- sf3
+
+sf1 *-- sf4
+sf1 *-- sf5
+sf1 *-- sf6
+
+sf6 *-- f1
+sf6 *-- f2
+sf6 *-- f3
+
+@enduml
