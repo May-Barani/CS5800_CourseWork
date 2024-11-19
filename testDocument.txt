@@ -1,7 +1,0 @@
-T, Arial, Red, 12
-E, Calibri, Blue, 14
-S, Verdana, Black, 16
-T, Arial, Red, 12
-I, Calibri, Blue, 14
-N, Arial, Black, 16
-G, Consolas, Blue, 12
