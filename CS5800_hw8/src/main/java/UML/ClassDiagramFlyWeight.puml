@@ -1,0 +1,49 @@
+@startuml
+'https://plantuml.com/class-diagram
+class Character
+class CharacterProperties
+class CharacterPropertiesFactory
+class Document
+
+Document "0"*-- "*" Character
+Document *-- CharacterPropertiesFactory
+Character o-- CharacterProperties
+CharacterPropertiesFactory "0"*--"*" CharacterProperties
+
+class Document {
+    - characters: List<Character>
+    - propertiesFactory: CharacterPropertiesFactory
+    + addCharacter(c: char, font: String, color: String, size: int): void
+    + editCharacterProperties(index: int, font: String, color: String, size: int): void
+    + saveToFile(filename: String): void
+    + loadFromFile(filename: String): void
+}
+
+class Character {
+    - character: char
+    - characterProperty: CharacterProperties
+    + Character(character: char, characterProperty: CharacterProperties)
+    + setCharacter(character: char): void
+    + setCharacterProperty(characterProperty: CharacterProperties): void
+    + getCharacter(): char
+    + getFont(): String
+    + getColor(): String
+    + getSize(): int
+}
+
+class CharacterPropertiesFactory {
+    - flyweights: Map<String, CharacterProperties>
+    + setAndRetrieveFlyweightCharacterProperties(font: String, color: String, size: int): CharacterProperties
+    + sizeOfMap(): int
+}
+
+class CharacterProperties {
+    - final font: String
+    - final color: String
+    - final size: int
+    + CharacterProperties(font: String, color: String, size: int)
+    + getFont(): String
+    + getColor(): String
+    + getSize(): int
+}
+@enduml
