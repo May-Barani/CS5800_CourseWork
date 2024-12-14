@@ -1,0 +1,11 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+' Generate Recommendation Activity Diagram
+start
+:SystemAPI retrieves Reader's activity data from Database;
+:Recommendation Engine analyzes the data;
+:SystemAPI fetches recommended stories;
+:SystemAPI displays recommendations to Reader;
+stop
+@enduml
+

@@ -1,0 +1,57 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+@startuml
+
+start
+
+:Open the App;
+:Logging In;
+
+if (Search Stories?) then (yes)
+  :Input story Title or Author Name;
+else (no)
+  :Browse Recommendations;
+  if (Select Filters?) then (yes)
+    :Set Genre, Tags, or Category;
+  else (no)
+    :View Recommendations without filters;
+  endif
+endif
+
+:Select and Read the Story;
+
+split
+
+if (Like) then
+:Vote;
+:Total Vote Count Increases;
+else
+:Not vote;
+endif
+
+split again
+
+if (Comment on Story?) then (yes)
+:Write Comment;
+:Publish Comment Automatically;
+else
+:No;
+endif
+
+split again
+
+if (Save to Library?) then
+:Yes;
+else
+:No;
+endif
+end split
+:Close the story;
+:Return To Home Screen ;
+:Close the App;
+stop
+@enduml
+
+
+

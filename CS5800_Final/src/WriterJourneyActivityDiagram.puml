@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:Log in as Writer;
+:Click "Create Story";
+:Enter Story Details (Title, Description, Tags, Genre);
+:Write Story Content;
+:Save Draft;
+
+if (Ready to Publish?) then (yes)
+  :Validate Story Details (Title, Description, Tags, Genre);
+  :Save Story to Database;
+  :Mark Story as Published;
+  :Story is Visible to Readers;
+else (no)
+  if (Continue Editing?) then (yes)
+    :Edit Content (Title, Content, Tags, Genre);
+    :Save Draft;
+  else (no)
+    stop
+  endif
+endif
+
+if (Edit Existing Story?) then (yes)
+  :Select Existing Story;
+  :Fetch Story from Database;
+  :Edit Content or Media (Description, Genre);
+  :Save Changes;
+  :Update Story in Database;
+endif
+
+stop
+@enduml

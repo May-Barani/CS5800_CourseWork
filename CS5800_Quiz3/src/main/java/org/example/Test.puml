@@ -1,0 +1,69 @@
+@startuml
+title YouTube App Class Diagram
+
+class User {
+    - userID: String
+    - username: String
+    - email: String
+    + search(keyword: String): List<Video>
+    + selectVideo(video: Video): void
+    + toggleCaptions(video: Video, language: String): void
+    + like(video: Video): void
+    + dislike(video: Video): void
+    + comment(video: Video, text: String): void
+    + share(video: Video, platform: String): void
+    + subscribe(channel: Channel): void
+    + saveForLater(video: Video): void
+}
+
+class Video {
+    - videoID: String
+    - title: String
+    - description: String
+    - views: int
+    - likes: int
+    - dislikes: int
+    - captions: Map<String, String>  'language -> caption
+    + play(): void
+    + pause(): void
+    + toggleCaptions(language: String): void
+    + incrementLikes(): void
+    + incrementDislikes(): void
+}
+
+class Reels {
+    - reelID: String
+    - title: String
+    - views: int
+    + play(): void
+    + pause(): void
+    + scroll(direction: String): void
+}
+
+class Interaction {
+    - interactionID: String
+    - type: String  'like, dislike, comment, share
+    - user: User
+    - video: Video
+    + save(): void
+    + share(platform: String): void
+}
+
+class Recommendation {
+    + browseRecommendations(): List<Video>
+}
+
+class App {
+    + open(): void
+    + close(): void
+    + returnToHomeScreen(): void
+}
+
+' Relationships
+User "1" --> "0..*" Video : interacts with
+User "1" --> "0..*" Reels : views
+User "1" --> "0..*" Recommendation : browses
+Video "1" --> "0..*" Interaction : generates
+App "1" --> "1" User : serves
+
+@enduml

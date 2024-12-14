@@ -1,0 +1,180 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+' Base User Class
+abstract class User {
+  - id: int
+  - username: String
+  - email: String
+  - passwordHash: String
+  + login(password: String): boolean
+  + logout(): void
+}
+
+' Subclasses for different user types
+class Reader extends User {
+  + browseStories(): void
+  + readStory(storyId: int): void
+  + bookmarkStory(storyId: int): void
+  + followAuthor(authorId: int): void
+}
+
+class Writer extends User {
+  + createStory(): void
+  + editStory(storyId: int): void
+  + interactWithReaders(commentId: int): void
+}
+
+class Admin extends User {
+  + moderateContent(contentId: int): void
+  + banUser(userId: int): void
+  + promoteFeaturedContent(storyId: int): void
+}
+
+User <|-- Reader
+User <|-- Writer
+User <|-- Admin
+
+' Story Structure
+class Story {
+  - id: int
+  - title: String
+  - tags: List<String>
+  - author: Writer
+  - isFeatured: boolean
+  - status: String
+  + getContent(): String
+  + addChapter(chapter: Chapter): void
+  + markAsFeatured(): void
+  + addInteraction(interaction: Interaction): void
+  + updateStatus(newStatus: String): void
+  + getTotalCupcakes(): int
+}
+
+Writer --> Story
+Admin --> Story
+
+class Chapter {
+  - id: int
+  - title: String
+  - content: String
+  + getChapterContent(): String
+}
+
+Story *-- Chapter
+Story --> Interaction
+
+' Interaction Class and Subclasses
+abstract class Interaction {
+  - id: int
+  - storyId: int
+  - userId: int
+  - timestamp: Date
+  + performInteraction(): void
+}
+
+class CupcakeVote extends Interaction {
+  - cupcakes: int
+  + getCupcakes(): int
+  + updateCupcakes(newCupcakes: int): void
+}
+
+class Read extends Interaction {
+  - progress: int
+  + getProgress(): int
+  + updateProgress(newProgress: int): void
+}
+
+class Comment extends Interaction {
+  - content: String
+  + getContent(): String
+  + updateContent(newContent: String): void
+}
+
+Interaction <|-- CupcakeVote
+Interaction <|-- Read
+Interaction <|-- Comment
+
+' Reader's library
+class Library {
+  - stories: List<Story>
+  + addStory(story: Story): void
+  + removeStory(story: Story): void
+  + getStories(): List<Story>
+  + getTotalStories(): int
+  + notifyStoryUpdates(story: Story, newChapter: Chapter): void
+}
+Reader --> Library
+Reader --> FollowAuthor
+
+Library --> Story
+Library --> Chapter
+
+' Comments and Interactions
+Comment --> Story
+Comment --> User
+
+' Recommendation Engine
+class RecommendationEngine {
+  - static instance: RecommendationEngine
+  + static getInstance(): RecommendationEngine
+  + generateRecommendations(userId: int): List<Story>
+}
+
+RecommendationEngine --> Story
+
+' Offline Story Access
+class OfflineStoryProxy {
+  - realStory: Story
+  + getStoryContent(storyId: int): String
+}
+
+OfflineStoryProxy --> Story
+
+' Follow Author Feature
+class FollowAuthor {
+  - authorFollowers: Map<Writer, List<Reader>>
+  + followAuthor(reader: Reader, writer: Writer): void
+  + unfollowAuthor(reader: Reader, writer: Writer): void
+  + notifyAuthorFollowers(writer: Writer, message: String): void
+}
+
+FollowAuthor --> Reader
+FollowAuthor --> Writer
+
+' Factory Pattern for User Creation
+class UserFactory {
+  + createUser(type: String, username: String, email: String): User
+}
+
+UserFactory --> User
+
+' Admin System for Moderation and Analytics
+class AdminSystem {
+  + reviewFlaggedContent(contentId: int): void
+  + trackSystemPerformance(): void
+}
+
+Admin --> AdminSystem
+
+' System API and Database
+class SystemAPI {
+  + authenticateUser(username: String, password: String): boolean
+  + getRecommendations(userId: int): List<Story>
+  + syncUserData(userId: int): void
+}
+
+SystemAPI --> RecommendationEngine
+SystemAPI --> OfflineStoryProxy
+SystemAPI --> Database
+
+class Database {
+  + fetchStoryById(storyId: int): Story
+  + saveUser(user: User): void
+  + getRecommendationsData(userId: int): List<Story>
+}
+Database --> Story
+Database --> User
+Database --> Interaction
+
+@enduml

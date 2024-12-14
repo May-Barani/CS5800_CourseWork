@@ -1,0 +1,98 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface Observer {
+    +update(message: String): void
+}
+
+interface Subject {
+    +addObserver(observer: Observer): void
+    +removeObserver(observer: Observer): void
+    +notifyObservers(message: String): void
+}
+
+class User implements Observer {
+    -int id
+    -String name
+    -List<Video> likedVideos
+    -List<Video> watchLaterVideos
+    +likeVideo(video: Video): void
+    +saveToWatchLater(video: Video): void
+    +commentOnVideo(video: Video, comment: String): void
+    +update(message: String): void
+}
+
+class Notification implements Observer {
+    -notificationID: String
+    -message: String
+    -sentTo: User
+    +update(message: String): void
+    +sendNotification(): void
+}
+
+class Channel implements Subject {
+    -List<Observer> observers
+    -String channelName
+    -List<Video> videos
+    +addObserver(observer: Observer): void
+    +removeObserver(observer: Observer): void
+    +notifyObservers(message: String): void
+    +uploadVideo(video: Video): void
+}
+
+class Playlist implements Subject {
+    -List<Observer> observers
+    -String playlistTitle
+    -List<Video> videos
+    +addObserver(observer: Observer): void
+    +removeObserver(observer: Observer): void
+    +notifyObservers(message: String): void
+    +addVideo(video: Video): void
+    +removeVideo(video: Video): void
+}
+
+class Video {
+    -int id
+    -String title
+    -String description
+    -List<Comment> comments
+    -List<User> likedBy
+    +addComment(user: User, text: String): void
+    +incrementLikes(user: User): void
+    +addToWatchLater(user: User): void
+}
+class Reaction {
+    +click()
+}
+
+class Like {
+    -User likedBy
+}
+
+class DisLike {
+    -User dislikedBy
+}
+
+class Comment {
+    -String text
+    -User commentedBy
+}
+
+Reaction <|-- Like
+Reaction <|-- DisLike
+Video o-- Reaction
+Video o-- Comment
+Comment o-- User
+
+
+Observer <|-- User
+Observer <|-- Notification
+Subject <|-- Channel
+Subject <|-- Playlist
+
+Channel o-- Observer : notifies
+Playlist o-- Observer : notifies
+User "1" o-- "0..*" Video : interacts with
+
+
+@enduml

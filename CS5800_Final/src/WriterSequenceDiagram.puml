@@ -1,0 +1,62 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+@startuml
+actor Writer
+participant "App Interface" as App
+participant "API" as Service
+participant "Database" as DB
+
+== Create Story ==
+Writer -> App: Log in
+App -> Service: Authenticate User
+Service -> DB: Fetch User Details
+DB --> Service: User Authenticated
+Service --> App: Login Successful
+
+Writer -> App: Click "Create Story"
+App -> Service: Create New Story
+Service --> App: Display Story Editor
+
+Writer -> App: Enter Story Details (Title, Description, Tags, Genre)
+Writer -> App: Write Story Content
+Writer -> App: Save Draft
+App -> Service: Save Draft to Database
+Service -> DB: Save Draft Details
+DB --> Service: Draft Saved
+Service --> App: Draft Saved
+App --> Writer: "Draft Saved Successfully"
+
+alt Ready to Publish?
+    Writer -> App: Publish Story
+    App -> Service: Validate Story Details
+    Service -> DB: Fetch Draft Details
+    DB --> Service: Draft Validated
+    Service -> DB: Save Published Story
+    DB --> Service: Story Published
+    App --> Writer: "Story Published Successfully"
+    Service --> App: Story Visible to Readers
+else Continue Editing?
+    Writer -> App: Edit Content (Title, Content, Tags, Genre)
+    App -> Service: Update Draft
+    Service -> DB: Save Updated Draft
+    DB --> Service: Draft Updated
+    Service --> App: Draft Updated
+    App --> Writer: "Draft Updated Successfully"
+end
+
+== Edit Existing Story ==
+Writer -> App: Select Existing Story
+App -> Service: Fetch Story Details
+Service -> DB: Fetch Story from Database
+DB --> Service: Story Details Retrieved
+Service --> App: Display Story Editor
+
+Writer -> App: Edit Content or Media (Description, Genre)
+Writer -> App: Save Changes
+App -> Service: Update Story
+Service -> DB: Update Story in Database
+DB --> Service: Story Updated
+Service --> App: Story Updated Confirmation
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:User opens YouTube;
+if (Is user logged in?) then (yes)
+  :Load personalized homepage;
+else (no)
+  :Load generic homepage;
+endif
+
+:User searches or selects a video;
+if (Is video available?) then (yes)
+  :Video begins streaming;
+  if (Is user interacting?) then (yes)
+    :Like or Dislike video;
+    :Add Comment;
+    if (Is user subscribed to channel?) then (no)
+      :Show Subscribe Button;
+      if (User subscribes?) then (yes)
+        :Add user to channel subscribers;
+      endif
+    endif
+  else (no)
+    :Continue playing video;
+  endif
+else (no)
+  :Show "Video Unavailable" message;
+endif
+
+if (User uploads a video?) then (yes)
+  :Validate video format;
+  if (Validation successful?) then (yes)
+    :Transcode video;
+    :Store video in database;
+    :Update channel video list;
+    :Notify subscribers;
+  else (no)
+    :Show error message;
+  endif
+else (no)
+  :User continues browsing;
+endif
+
+stop
+
+@enduml

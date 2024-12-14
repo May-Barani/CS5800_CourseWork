@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+
+:Reader clicks "Follow" on author's profile;
+:SystemAPI validates Reader's session;
+:The function adds the Reader to the author's followers list;
+:confirms the subscription;
+:Display "You are now following [Author Username]";
+
+stop
+@enduml
+

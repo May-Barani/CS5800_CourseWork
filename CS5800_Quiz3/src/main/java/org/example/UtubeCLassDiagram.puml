@@ -1,0 +1,75 @@
+@startuml
+'title YouTube Class Diagram with Singleton Design Pattern
+
+class User {
+    - userID: String
+    - username: String
+    - email: String
+    - password: String
+    + register(): void
+    + login(): boolean
+    + subscribe(channel: Channel): void
+    + comment(video: Video, text: String): void
+    + like(video: Video): void
+    + dislike(video: Video): void
+}
+
+class Video {
+    - videoID: String
+    - title: String
+    - description: String
+    - views: int
+    - likes: int
+    - dislikes: int
+    - uploadDate: Date
+    - tags: List<String>
+    + addComment(comment: Comment): void
+    + play(): void
+    + pause(): void
+    + stop(): void
+}
+
+class Channel {
+    - channelID: String
+    - channelName: String
+    - subscribers: List<User>
+    - videos: List<Video>
+    + uploadVideo(video: Video): void
+    + notifySubscribers(): void
+}
+
+class Comment {
+    - commentID: String
+    - author: User
+    - text: String
+    - timestamp: Date
+}
+
+class Playlist {
+    - playlistID: String
+    - title: String
+    - description: String
+    - videos: List<Video>
+    + addVideo(video: Video): void
+    + removeVideo(video: Video): void
+    + playAll(): void
+}
+
+class RecommendationEngine <<Using Singleton>> {
+    - instance: RecommendationEngine
+    + recommendVideos(user: User): List<Video>
+    + generateTrendingVideos(): List<Video>
+    + getInstance(): RecommendationEngine
+}
+
+' Relationships
+User "..*" --> "1..*" Video : likes/comments on
+User "..*" --> "1" Channel : subscribes
+Channel "1" --> "0..*" Video : uploads
+Video "0..*" --> "0..*" Comment : has
+User "0..*" --> "0..*" Playlist : creates/edits
+Playlist "0..*" --> "0..*" Video : contains
+RecommendationEngine ..> Video : suggests
+RecommendationEngine ..> User : analyzes
+
+@enduml

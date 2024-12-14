@@ -1,0 +1,72 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor Reader
+participant "App Interface" as App
+participant "API" as API
+participant "Recommendation Service" as RecommendationAPI
+participant "Database" as Database
+
+Reader -> App : Open the App
+Reader -> App : Logging In
+App -> API : Authenticate Reader
+API -> Database : Fetch User Credentials
+Database --> API : Credentials Verified
+API --> App : Reader Authenticated
+
+alt Search Stories
+  Reader -> App : Input Story Title or Author Name
+  App -> API : Search Stories
+  API -> Database : Fetch Stories by Title or Author
+  Database --> API : Return Search Results
+  API --> App : Display Search Results
+else Browse Recommendations
+  App -> RecommendationAPI : Fetch Recommendations
+  alt Select Filters
+    Reader -> App : Set Genre, Tags, or Category
+    App -> RecommendationAPI : Apply Filters
+  else View Without Filters
+    App -> RecommendationAPI : Fetch All Recommendations
+  end
+  RecommendationAPI -> Database : Fetch Recommendation Data
+  Database --> RecommendationAPI : Recommendation Data
+  RecommendationAPI --> App : Display Recommendations
+end
+
+Reader -> App : Select and Read the Story
+App -> API : Fetch Story Details
+API -> Database : Retrieve Story Content
+Database --> API : Story Data
+API --> App : Display Story Content
+
+par Like Story
+  Reader -> App : Vote (e.g., Cupcake)
+  App -> API : Increment Vote Count
+  API -> Database : Update Vote Count
+  Database --> API : Vote Count Updated
+else Not Vote
+  Reader -> App : No Vote
+end
+
+par Comment on Story
+  Reader -> App : Write Comment
+  App -> API : Save Comment
+  API -> Database : Update Comment into Database
+  Database --> API : Comment Saved
+else No Comment
+  Reader -> App : Skip Comment
+end
+
+par Save to Library
+  Reader -> App : Add to Library
+  App -> API : Save Story to Library
+  API -> Database : Update Library Data
+  Database --> API : Story Saved to Library
+else Skip Save
+  Reader -> App : Do Not Save
+end
+
+Reader -> App : Close the Story
+App -> Reader : Return to Home Screen
+Reader -> App : Close the App
+@enduml
